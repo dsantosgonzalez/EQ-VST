@@ -10,10 +10,18 @@
 
 #include <JuceHeader.h>
 
+enum Slope{
+    Slope_6,
+    Slope_12,
+    Slope_18,
+    Slope_24
+};
+
 struct ChainSettings{
     float peakFreq {0}, peakGainInDecibels {0}, peakQ {1.0f};
     float lowCutFreq {0}, highCutFreq {0};
-    int lowCutSlope {0}, highCutSlope {0};
+    
+    Slope lowCutSlope {Slope::Slope_6}, highCutSlope {Slope::Slope_6};
 };
 
 ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts);
@@ -68,7 +76,7 @@ private:
     
     using Filter = juce::dsp::IIR::Filter<float>;
     
-    using CutFilter = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter>;
+    using CutFilter = juce::dsp::ProcessorChain<Filter, Filter>;
     
     using MonoChain = juce::dsp::ProcessorChain<CutFilter, Filter, CutFilter>;
     
